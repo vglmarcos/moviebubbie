@@ -1,45 +1,62 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  let tmdbToken =
+    'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNDkwMDg4N2ZkNTIyYmU4Zjk4NTUxMjI1NjI5NWI0NiIsInN1YiI6IjYzOTdlZjYwMmNlZmMyMDA4NGI1ZjBlNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hirqLLTfuFVuw8CKfPhOoGave_yF5EvayFgLPSzUG3c';
+
+  let moviesData = null;
+
+  fetch(
+    'https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_year=2000&with_watch_monetization_types=flatrate',
+    {
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Bearer ${tmdbToken}`,
+      },
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed');
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      moviesData = Object.values(data.results);
+      console.log(moviesData);
+    });
 </script>
 
-<main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
-
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
+  .movie-container {
+    widows: 100vw;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  
+  .movie-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
+
+  .movie-poster {
+    width: 300px;
   }
 </style>
+
+<h1>2000's Most Popular Movies</h1>
+{#if !moviesData}
+  <p>No hay datos</p>
+{:else}
+  <div class="movie-container">
+    {#each moviesData as movie}
+    <div class="movie-card">
+      <img class="movie-poster" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt="" />
+      <p>{movie.title}</p>
+    </div>
+  {/each}
+  </div>
+  
+{/if}
