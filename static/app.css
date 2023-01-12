@@ -1,0 +1,35 @@
+:root {
+    /* Color scheme */
+    --main-black: #222227;
+    --white: #ffffff;
+
+    --dark-purple: #232136;
+    --purple: #8179D5;
+    --light-purple: #C4A7E7;
+
+    --dark-pink: #C73860;
+    --pink: #E36588;
+    --light-pink: #FFACC3;
+
+    --dark-blue: #005564;
+    --blue: #0CACC8;
+    --light-blue: #BDE5EC;
+
+    --dark-gray: #666666;
+    --gray: #A2A2A2;
+    --light-gray: #E6E6E6;
+
+    --success: #037E00;
+    --error: #CC0000;
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--main-black);
+    color: var(--white);
+    font-family: 'Manrope', sans-serif;
+}
